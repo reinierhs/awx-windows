@@ -2,11 +2,7 @@
 - name: Install applications using Chocolatey
   hosts: all
   tasks:
-    - name: Ensure Chocolatey is installed
-      ansible.windows.win_chocolatey:
-        name: chocolatey
-        state: present
-
+    
     - name: Install Firefox
       ansible.windows.win_chocolatey:
         name: firefox
