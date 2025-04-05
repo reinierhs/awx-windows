@@ -1,0 +1,20 @@
+---
+- name: Perform Windows tasks
+  hosts: all
+  tasks:
+    - name: Ensure the C:\tmp directory exists
+      ansible.windows.win_file:
+        path: C:\tmp
+        state: directory
+
+    - name: Create a file with text
+      ansible.windows.win_copy:
+        content: "Some text from ansible awx"
+        dest: C:\tmp\file.txt
+
+    - name: Run Windows Update
+      ansible.windows.win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+        reboot: yes
