@@ -2,17 +2,6 @@
   hosts: all
   tasks:
 
-    - name: Install .NET Framework 4.8
-      win_package:
-        path: https://download.microsoft.com/download/2/7/4/274F3B61-E4D3-4C42-98C7-8EEC45580F8A/ndp48-web.exe
-        arguments: /quiet /norestart
-      when: dotnet_version.stdout is not defined or dotnet_version.stdout | int < 528040
-
-    - name: Reboot if required
-      win_reboot:
-        msg: "Rebooting after .NET Framework installation."
-      when: ansible_reboot_required
-
     - name: Install Firefox
       win_chocolatey:
         name: firefox
