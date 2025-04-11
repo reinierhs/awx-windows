@@ -2,16 +2,6 @@
   hosts: all
   tasks:
 
-    - name: Check if .NET Framework 4.8 is already installed
-      win_shell: |
-        $key = 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full'
-        if (Test-Path $key) {
-          (Get-ItemProperty $key).Release
-        } else {
-          Write-Output "Not Installed"
-      register: dotnet_version
-      changed_when: false
-
     - name: Install .NET Framework 4.8
       win_package:
         path: https://download.microsoft.com/download/2/7/4/274F3B61-E4D3-4C42-98C7-8EEC45580F8A/ndp48-web.exe
