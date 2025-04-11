@@ -2,6 +2,23 @@
   hosts: all
   tasks:
 
+    - name: Ensure PowerShell is available
+      win_feature:
+        name: PowerShell
+        state: present
+
+    - name: Install Chocolatey
+      win_uri:
+        url: https://chocolatey.org/install.ps1
+        method: GET
+        return_content: yes
+      register: chocolatey_install_script
+
+    - name: Run Chocolatey installation script
+      win_shell: "{{ chocolatey_install_script.content }}"
+      args:
+        executable: powershell
+
     - name: Install Firefox
       win_chocolatey:
         name: firefox
