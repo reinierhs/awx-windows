@@ -3,13 +3,14 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Install IIS Role
-      win_feature:
+    - name: Install IIS Web-Server with sub features and management tools
+      ansible.windows.win_feature:
         name: Web-Server
         state: present
+        include_sub_features: true
+        include_management_tools: true
+      register: win_feature
 
-    - name: Ensure IIS service is running
-      win_service:
-        name: W3SVC
-        state: started
-        start_mode: auto
+    - name: Reboot if installing Web-Server feature requires it
+      ansible.windows.win_reboot:
+      when: win_feature.reboot_required
