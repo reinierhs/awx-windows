@@ -1,10 +1,16 @@
 ---
 - name: Install IIS Role on Windows
   hosts: all
-  becbecome: yes
+  gather_facts: false
+  become: yes
   tasks:
     - name: Install IIS Role
       win_feature:
         name: Web-Server
         state: present
-      become: yes
+
+    - name: Ensure IIS service is running
+      win_service:
+        name: W3SVC
+        state: started
+        start_mode: auto
