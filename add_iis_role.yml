@@ -12,3 +12,10 @@
         include_management_tools: true
         state: present
       #register: win_feature
+    
+    - name: Running Windows Update
+      ansible.windows.win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+        reboot: yes
