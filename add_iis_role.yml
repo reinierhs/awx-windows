@@ -1,16 +1,21 @@
 ---
-- name: Install IIS Role on Windows
+- name: Install a Role on Windows Servers
   hosts: all
   gather_facts: false
   tasks:
-    - name: Install IIS Web-Server with sub features and management tools
+    - name: Install IIS on Windows
       ansible.windows.win_feature:
-        name: Web-Server
-        state: present
-        include_sub_features: true
+        name: 
+         - Web-Server
+         - Web-Common-Http
+        include_sub_features: true 
         include_management_tools: true
-      register: win_feature
-
-    - name: Reboot if installing Web-Server feature requires it
-      ansible.windows.win_reboot:
-      when: win_feature.reboot_required
+        state: present
+      #register: win_feature
+    
+    - name: Running Windows Update
+      ansible.windows.win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+        reboot: yes
