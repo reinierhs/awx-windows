@@ -4,7 +4,7 @@ choco_packages:
   - name: notepadplusplus
     version: 8.4.3
   - name: googlechrome
-    version: 135.0.7049.42
+    version: latest
   - name: firefox
     version: 137.0.2
   - name: python
