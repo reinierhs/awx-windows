@@ -1,15 +1,18 @@
 ---
-- name: Update packages based on OS type
+- name: Update Linux systems based on distribution
   hosts: all
   become: yes
-  tasks:
-    - name: Update on Debian-based
-      apt:
-        update_cache: yes
-      when: ansible_os_family == "Debian"
+  gather_facts: yes
 
-    - name: Update on RedHat-based
+  tasks:
+    - name: Update Red Hat family systems
       yum:
         name: "*"
         state: latest
-      when: ansible_os_family == "RedHat"
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Update Ubuntu systems
+      apt:
+        update_cache: yes
+        upgrade: dist
+      when: ansible_facts['os_family'] == "Debian"
