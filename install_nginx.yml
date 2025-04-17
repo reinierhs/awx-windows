@@ -1,14 +1,22 @@
 ---
-- name: Install and configure NGINX without SSL
+- name: Install and configure NGINX based on OS family
   hosts: all
   become: yes
+  gather_facts: yes
 
   tasks:
-    - name: Install NGINX
+    - name: Install NGINX on Red Hat family systems
+      yum:
+        name: nginx
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: Install NGINX on Debian family systems
       apt:
         name: nginx
         state: present
         update_cache: yes
+      when: ansible_facts['os_family'] == "Debian"
 
     - name: Ensure NGINX is enabled and started
       service:
