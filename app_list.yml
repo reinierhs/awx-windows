@@ -1,8 +1,8 @@
 choco_packages:
   - name: 7zip
-    version: 22.0.0
+    version: latest
   - name: notepadplusplus
-    version: 8.4.3
+    version: latest
   - name: firefox
     version: 137.0.2
   - name: python
