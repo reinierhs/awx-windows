@@ -6,10 +6,10 @@
     - app_list.yml
 
   tasks:
-    - name: Install specified versions of applications using Chocolatey
+    - name: Install applications using Chocolatey
       chocolatey.chocolatey.win_chocolatey:
         name: "{{ item.name }}"
-        version: "{{ item.version }}"
+        state: present
         force: yes
       loop: "{{ choco_packages }}"
 
