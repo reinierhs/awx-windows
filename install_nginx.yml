@@ -1,0 +1,62 @@
+---
+- name: Install and configure NGINX with SSL
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install NGINX
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure NGINX is enabled and started
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Install SSL module for NGINX
+      apt:
+        name: nginx-core
+        state: present
+        update_cache: yes
+
+    - name: Create a self-signed SSL certificate
+      command: >
+        openssl req -x509 -nodes -days 365 -newkey rsa:2048
+        -keyout /etc/ssl/private/nginx-selfsigned.key
+        -out /etc/ssl/certs/nginx-selfsigned.crt
+        -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com"
+      args:
+        creates: /etc/ssl/private/nginx-selfsigned.key
+
+    - name: Configure NGINX to use SSL
+      copy:
+        dest: /etc/nginx/sites-available/default
+        content: |
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+              listen 443 ssl default_server;
+              listen [::]:443 ssl default_server;
+
+              ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+              ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+
+              root /var/www/html;
+              index index.html index.htm index.nginx-debian.html;
+
+              server_name _;
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+          }
+      notify: Restart NGINX
+
+  handlers:
+    - name: Restart NGINX
+      service:
+        name: nginx
+        state: restarted
