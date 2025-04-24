@@ -1,6 +1,6 @@
 ---
 - name: Perform Windows tasks
-  hosts: all
+  hosts: windows
   tasks:
 
     - name: Run Windows Update
