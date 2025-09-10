@@ -1,7 +1,7 @@
 ---
 - name: Update Linux systems based on distribution
   hosts: all
-  become: yes
+  #become: yes
   gather_facts: yes
 
   tasks:
