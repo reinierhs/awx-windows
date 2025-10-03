@@ -13,10 +13,3 @@
         force: yes
       loop: "{{ choco_packages }}"
 
-    - name: Check python version
-      ansible.windows.win_command: python --version
-      register: check_python_version
-
-    - name: Print version
-      ansible.builtin.debug:
-        msg: "Python version is {{ check_python_version.stdout }}"
