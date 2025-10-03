@@ -2,5 +2,6 @@ choco_packages:
   - name: 7zip
   - name: notepadplusplus
   - name: firefox
-  - name: python
+  - name: googlechrome
   - name: git
+  - name: procexp
