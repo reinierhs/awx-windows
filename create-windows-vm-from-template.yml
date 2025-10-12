@@ -1,0 +1,77 @@
+---
+- name: Create and configure Windows VM from vCenter template
+  hosts: localhost
+  gather_facts: no
+  vars:
+    vcenter_hostname: "{{ lookup('env', '172.16.1.111') }}"
+    vcenter_username: "{{ lookup('env', 'administrator@vsphere.local') }}"
+    vcenter_password: "{{ lookup('env', 'VMware1!') }}"
+    datacenter: "Datacenter"
+    template: "Win-2019"
+    vm_name: "DC-Doral"
+    vm_folder: "/"
+    datastore: " HP800-DS1"
+    network_name: "VM Network"
+    guest_os_customization: true
+    admin_user: "Administrator"
+    admin_password: "Password1"
+    winrm_listen_port: 5986
+    winrm_enable_https: true
+    winrm_cert_subject: "CN=dhtech.local"
+    winrm_trusted_hosts: "*"
+    vm_hardware:
+      num_cpus: 2
+      memory_mb: 4096
+  tasks:
+    - name: Clone VM from template
+      community.vmware.vmware_guest:
+        hostname: "{{ vcenter_hostname }}"
+        username: "{{ vcenter_username }}"
+        password: "{{ vcenter_password }}"
+        validate_certs: no
+        datacenter: "{{ datacenter }}"
+        cluster: "{{ cluster }}"
+        folder: "{{ vm_folder }}"
+        name: "{{ vm_name }}"
+        template: "{{ template }}"
+        state: poweredon
+        datastore: "{{ datastore }}"
+        networks:
+          - name: "{{ network_name }}"
+        hardware:
+          memory_mb: "{{ vm_hardware.memory_mb }}"
+          num_cpus: "{{ vm_hardware.num_cpus }}"
+        customization:
+          hostname: "{{ vm_name }}"
+          domain: "local"
+          admin_password: "{{ admin_password }}"
+          timezone: 004
+        wait_for_ip_address: yes
+      register: deploy_result
+
+    - name: Wait for WinRM to become available
+      ansible.builtin.wait_for:
+        host: "{{ deploy_result.instance.ip_address }}"
+        port: "{{ winrm_listen_port }}"
+        delay: 30
+        timeout: 600
+        state: started
+
+    - name: Enable WinRM over HTTPS (self-signed)
+      ansible.windows.win_shell: |
+        winrm quickconfig -q
+        winrm set winrm/config/service/auth '@{Basic="true"}'
+        winrm set winrm/config/service '@{AllowUnencrypted="false"}'
+        winrm set winrm/config/service '@{EnableCompatibilityHttpListener="false"}'
+        winrm set winrm/config/service '@{EnableCompatibilityHttpsListener="true"}'
+        $cert = New-SelfSignedCertificate -DnsName {{ winrm_cert_subject }} -CertStoreLocation Cert:\LocalMachine\My
+        winrm create winrm/config/Listener?Address=*+Transport=HTTPS '@{Hostname="{{ winrm_cert_subject }}";CertificateThumbprint="$($cert.Thumbprint)"}'
+        Set-Item WSMan:\localhost\Client\TrustedHosts -Value {{ winrm_trusted_hosts }}
+      vars:
+        ansible_connection: winrm
+        ansible_winrm_server_cert_validation: ignore
+        ansible_winrm_transport: ntlm
+        ansible_user: "{{ admin_user }}"
+        ansible_password: "{{ admin_password }}"
+      delegate_to: "{{ deploy_result.instance.ip_address }}"
+      when: guest_os_customization
