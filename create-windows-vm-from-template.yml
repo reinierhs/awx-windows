@@ -33,3 +33,4 @@
         hardware:
           memory_mb: "{{ vm_hardware.memory_mb }}"
           num_cpus: "{{ vm_hardware.num_cpus }}"
+      delegate_to: localhost
