@@ -2,11 +2,10 @@
 - name: Create and power on Windows VM from vCenter template
   hosts: localhost
   gather_facts: no
-
   vars:
-    vcenter_hostname: "{{ lookup('env', '172.16.1.111') }}"
-    vcenter_username: "{{ lookup('env', 'administrator@vsphere.local') }}"
-    vcenter_password: "{{ lookup('env', 'VMware1!') }}"
+    vcenter_hostname: "172.16.1.111"
+    vcenter_username: "administrator@vsphere.local"
+    vcenter_password: "VMware1!"
     datacenter: "Datacenter"
     template: "Win-2019"
     vm_name: "DC-Doral"
