@@ -2,6 +2,7 @@
 - name: Create and power on Windows VM from vCenter template
   hosts: localhost
   gather_facts: no
+
   vars:
     vcenter_hostname: "{{ lookup('env', '172.16.1.111') }}"
     vcenter_username: "{{ lookup('env', 'administrator@vsphere.local') }}"
@@ -10,11 +11,12 @@
     template: "Win-2019"
     vm_name: "DC-Doral"
     vm_folder: "/"
-    datastore: " HP800-DS1"
+    datastore: "HP800-DS1"
     network_name: "VM Network"
     vm_hardware:
       num_cpus: 2
       memory_mb: 4096
+
   tasks:
     - name: Clone VM from template and power on
       community.vmware.vmware_guest:
