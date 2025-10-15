@@ -5,21 +5,21 @@
   tasks:
 
     - name: Install Firefox
-      ansible.windows.win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: firefox
         state: present
 
     - name: Install 7-Zip
-      ansible.windows.win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: 7zip
         state: present
 
     - name: Install Notepad++
-      ansible.windows.win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: notepadplusplus
         state: present
 
     - name: Install Process Explorer
-      ansible.windows.win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: procexp
         state: present
