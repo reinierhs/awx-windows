@@ -1,6 +1,6 @@
 ---
 - name: Install Applications with Chocolatey
-  hosts: windows
+  hosts: all
   gather_facts: false
 
   vars:
