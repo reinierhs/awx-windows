@@ -104,8 +104,3 @@
     - name: Get list of installed Chocolatey packages
       win_chocolatey_facts:
       register: choco_packages
-
-    - name: Display installed packages
-      debug:
-        msg: "Installed packages: {{ choco_packages.chocolatey | map(attribute='package') | list }}"
-      tags: info
