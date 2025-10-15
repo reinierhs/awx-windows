@@ -26,54 +26,54 @@
   tasks:
 
     - name: Ensure Chocolatey is installed
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: chocolatey
         state: present
 
     - name: Enable Chocolatey global confirmation (to avoid prompts)
-      ansible.windows.win_chocolatey_feature:
+      win_chocolatey_feature:
         name: allowGlobalConfirmation
         state: enabled
 
     - name: Install web browsers
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: "{{ browsers }}"
         state: present
       tags: [browsers, web]
 
     - name: Install development tools
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: "{{ development_tools }}"
         state: present
       tags: [development, dev-tools]
 
     - name: Install productivity applications
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: "{{ productivity_tools }}"
         state: present
       tags: [productivity, office]
 
     - name: Install Google Chrome with specific parameters
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: googlechrome
         state: present
         install_args: '/allusers'
       tags: browsers
 
     - name: Install Visual Studio Code with extensions
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: vscode
         state: present
       tags: development
 
     - name: Upgrade all installed Chocolatey packages
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: all
         state: latest
       tags: [update, upgrade]
 
     - name: Remove unwanted applications
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name:
           - mcafee
           - norton
@@ -81,7 +81,7 @@
       tags: cleanup
 
     - name: Install package from custom source
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name: customapp
         state: present
         source: 'https://custom-repo.example.com/api/v2'
@@ -89,7 +89,7 @@
       tags: custom
 
     - name: Pin critical applications
-      ansible.windows.win_chocolatey:
+      win_chocolatey:
         name:
           - googlechrome
           - firefox
@@ -116,7 +116,7 @@
         msg: "VS Code is {{ 'installed' if vscode_installed.stat.exists else 'not installed' }}"
 
     - name: Get list of installed Chocolatey packages
-      ansible.windows.win_chocolatey_facts:
+      win_chocolatey_facts:
       register: choco_packages
 
     - name: Display installed packages
