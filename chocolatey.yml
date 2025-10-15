@@ -1,18 +1,21 @@
 - name: Install applications using Chocolatey
   hosts: all
+  gather_facts: false
+
   tasks:
 
     - name: Install Firefox
-      win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: firefox
         state: present
 
     - name: Install 7-Zip
-      win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: 7zip
         state: present
 
     - name: Install Notepad++
-      win_chocolatey:
+      chocolatey.chocolatey.win_chocolatey:
         name: notepadplusplus
         state: present
+
