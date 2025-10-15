@@ -1,6 +1,0 @@
-choco_packages:
-  - name: 7zip
-  - name: notepadplusplus
-  - name: firefox
-  - name: git
-  - name: procexp
