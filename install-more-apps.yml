@@ -57,7 +57,7 @@
       win_chocolatey:
         name: googlechrome
         state: present
-        install_args: '/allusers'
+        #install_args: '/allusers'
       tags: browsers
 
     - name: Install Visual Studio Code with extensions
