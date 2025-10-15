@@ -3,7 +3,6 @@
   gather_facts: false
 
   tasks:
-
     - name: Install Firefox
       chocolatey.chocolatey.win_chocolatey:
         name: firefox
